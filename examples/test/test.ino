@@ -15,10 +15,7 @@ void setup()
 {
 	timer.Start();
 	serial.Open(serial.Speed::Bps57600);
-	serial.Printf(F("#### test-TwoWire ####\n"));
 	twi.Open();
-	//twi.SetTimeout(1000);
-	//serial.Printf(F("%d\n"), twi.Transmit(0x27));
 	lcd.Open();
 	lcd.Clear();
 	lcd.EntryModeSet(true, false);
@@ -33,13 +30,10 @@ int cnt = 0;
 void loop()
 {
 	if (alarm.IsExpired()) {
+		if (cnt == 0) lcd.Clear();
 		lcd.SetPosition(0, 0);
 		lcd.Printf(F("Count:%4d"), cnt);
 		cnt++;
 		alarm.Start();
 	}
-	//timer.DelayMSec(2000);
-	//lcd.SetPosition(0, 0);
-	//lcd.Printf(F("World"));
-	//timer.DelayMSec(2000);
 }
