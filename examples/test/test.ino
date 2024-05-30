@@ -23,17 +23,97 @@ void setup()
 	lcd.FunctionSet(true, true);
 	lcd.Printf(F("LCD1602 Test"));
 	alarm.Start(1000);
+	do {
+		static const uint8_t data[] PROGMEM = {
+			// Character#0
+			0b01110,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b01110,
+			// Character#1
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b01110,
+			// Character#2
+			0b00000,
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b01110,
+			// Character#3
+			0b00000,
+			0b00000,
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b10001,
+			0b01110,
+			// Character#4
+			0b00000,
+			0b00000,
+			0b00000,
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b01110,
+			// Character#5
+			0b00000,
+			0b00000,
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b01110,
+			0b00000,
+			// Character#6
+			0b00000,
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b01110,
+			0b00000,
+			0b00000,
+			// Character#7
+			0b00000,
+			0b01110,
+			0b10001,
+			0b10001,
+			0b01110,
+			0b00000,
+			0b00000,
+			0b00000,
+		};
+		lcd.WriteCGRAM_P(0, data, sizeof(data));
+	} while (0);
 }
 
-int cnt = 0;
+uint8_t codeTop = 0;
 
 void loop()
 {
 	if (alarm.IsExpired()) {
-		if (cnt == 0) lcd.Clear();
 		lcd.SetPosition(0, 0);
-		lcd.Printf(F("Count:%4d"), cnt);
-		cnt++;
+		lcd.Printf("Character %02X-%02X", codeTop, codeTop + 15);
+		lcd.SetPosition(0, 1);
+		for (uint8_t i = 0; i < 16; i++) {
+			lcd.PutChar(codeTop + i);
+		}
+		codeTop += 16;
 		alarm.Start();
 	}
 }
